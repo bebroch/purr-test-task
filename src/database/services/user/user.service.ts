@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { UserEntity } from 'src/database/entities/user.entity'
-import { Repository } from 'typeorm'
+import { FindManyOptions, FindOneOptions, Repository } from 'typeorm'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
 
@@ -17,19 +17,28 @@ export class UserService {
         return await this.userRepository.save(newUser)
     }
 
-    public async findAll() {
-        return `This action returns all user`
+    public async find(options?: FindManyOptions<UserEntity>) {
+        return await this.userRepository.find(options)
     }
 
-    public async findOne(id: number) {
-        return `This action returns a #${id} user`
+    public async findOne(options?: FindOneOptions<UserEntity>) {
+        return await this.userRepository.findOne(options)
     }
 
     public async update(id: number, updateUserDto: UpdateUserDto) {
-        return `This action updates a #${id} user`
+        const user = await this.findOne({ where: { id } })
+        console.log(user)
+        if (!user) throw new Error('User not found')
+
+        return await this.userRepository.save({
+            ...user,
+            ...updateUserDto.get(),
+        })
     }
 
-    public async remove(id: number) {
-        return `This action removes a #${id} user`
+    public async delete(id: number) {
+        const user = await this.findOne({ where: { id } })
+        if (!user) throw new Error('User not found')
+        return await this.userRepository.delete(user)
     }
 }

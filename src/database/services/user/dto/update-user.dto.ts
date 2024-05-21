@@ -1,4 +1,14 @@
-import { PartialType } from '@nestjs/mapped-types'
-import { CreateUserDto } from './create-user.dto'
+import { UserEntity } from 'src/database/entities/user.entity'
 
-export class UpdateUserDto extends PartialType(CreateUserDto) {}
+export class UpdateUserDto {
+    private email?: string
+    private password?: string
+
+    constructor(userData: Partial<Pick<UserEntity, 'email' | 'password'>>) {
+        Object.assign(this, userData)
+    }
+
+    public get() {
+        return Object.assign({}, this)
+    }
+}

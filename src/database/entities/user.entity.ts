@@ -1,26 +1,28 @@
 import {
-    Column as ColumnTypeorm,
+    Column,
+    CreateDateColumn,
     Entity,
     OneToMany,
     PrimaryGeneratedColumn,
+    UpdateDateColumn,
 } from 'typeorm'
 import { ColumnEntity } from './column.entity'
 
-@Entity()
+@Entity({ name: 'users' })
 export class UserEntity {
     @PrimaryGeneratedColumn()
     id: number
 
-    @ColumnTypeorm()
+    @Column()
     email: string
 
-    @ColumnTypeorm()
+    @Column()
     password: string
 
-    @ColumnTypeorm()
+    @CreateDateColumn()
     created_at: Date
 
-    @ColumnTypeorm()
+    @UpdateDateColumn()
     updated_at: Date
 
     @OneToMany(() => ColumnEntity, (column) => column.user)

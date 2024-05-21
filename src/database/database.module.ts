@@ -1,7 +1,10 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { join } from 'path'
+import { CardEntity } from './entities/card.entity'
+import { ColumnEntity } from './entities/column.entity'
+import { CommentEntity } from './entities/comment.entity'
+import { UserEntity } from './entities/user.entity'
 
 @Module({
     imports: [
@@ -15,7 +18,7 @@ import { join } from 'path'
                 password: configService.get('DB_PASSWORD'),
                 database: configService.get('DB_DATABASE'),
                 synchronize: true,
-                entities: [join(__dirname, './entities/**/*.entity.{ts,js}')],
+                entities: [UserEntity, ColumnEntity, CardEntity, CommentEntity],
             }),
             inject: [ConfigService],
         }),

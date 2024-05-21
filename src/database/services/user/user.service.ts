@@ -21,13 +21,12 @@ export class UserService {
         return await this.userRepository.find(options)
     }
 
-    public async findOne(options?: FindOneOptions<UserEntity>) {
+    public async findOne(options: FindOneOptions<UserEntity>) {
         return await this.userRepository.findOne(options)
     }
 
     public async update(id: number, updateUserDto: UpdateUserDto) {
         const user = await this.findOne({ where: { id } })
-        console.log(user)
         if (!user) throw new Error('User not found')
 
         return await this.userRepository.save({

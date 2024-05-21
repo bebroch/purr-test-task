@@ -1,25 +1,27 @@
 import {
-    Column as ColumnTypeorm,
+    Column,
+    CreateDateColumn,
     Entity,
     ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
+    UpdateDateColumn,
 } from 'typeorm'
 import { ColumnEntity } from './column.entity'
 import { CommentEntity } from './comment.entity'
 
-@Entity()
+@Entity({ name: 'cards' })
 export class CardEntity {
     @PrimaryGeneratedColumn()
     id: number
 
-    @ColumnTypeorm()
+    @Column()
     text: string
 
-    @ColumnTypeorm()
+    @CreateDateColumn()
     created_at: Date
 
-    @ColumnTypeorm()
+    @UpdateDateColumn()
     updated_at: Date
 
     @ManyToOne(() => ColumnEntity, (column) => column.id)

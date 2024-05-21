@@ -1,10 +1,16 @@
 import { Injectable } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { ColumnEntity } from 'src/database/entities/column.entity'
+import { Repository } from 'typeorm'
 import { CreateColumnDto } from './dto/create-column.dto'
 import { UpdateColumnDto } from './dto/update-column.dto'
 
 @Injectable()
 export class ColumnService {
-    constructor(private readonly columnService: ColumnService) {}
+    constructor(
+        @InjectRepository(ColumnEntity)
+        private readonly columnRepository: Repository<ColumnEntity>,
+    ) {}
 
     create(createColumnDto: CreateColumnDto) {
         return 'This action adds a new column'

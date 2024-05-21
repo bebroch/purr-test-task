@@ -1,16 +1,17 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
 import { TokenService } from '@token/token'
 import * as bcrypt from 'bcrypt'
 import { UserEntity } from 'src/database/entities/user.entity'
-import { CreateUserDto } from 'src/database/services/user/dto/create-user.dto'
-import { UserEntityService } from 'src/database/services/user/user.service'
+import { Repository } from 'typeorm'
 import { LoginDto } from './dto/login.dto'
 import { RegistrationDto } from './dto/registration.dto'
 
 @Injectable()
 export class AuthService {
     constructor(
-        private readonly userService: UserEntityService,
+        @InjectRepository(UserEntity)
+        private readonly userRepository: Repository<UserEntity>,
         private readonly tokenService: TokenService,
     ) {}
 
@@ -22,7 +23,7 @@ export class AuthService {
     public async login(loginDto: LoginDto) {
         const { email, password } = loginDto
 
-        const user = await this.userService.findOne({ where: { email } })
+        const user = await this.userRepository.findOne({ where: { email } })
         if (!user) throw new BadRequestException('User not found')
 
         const isValidPassword = await bcrypt.compare(user.password, password)
@@ -41,15 +42,15 @@ export class AuthService {
     public async registration(registrationDto: RegistrationDto) {
         const { email, password } = registrationDto
 
-        const user = await this.userService.findOne({ where: { email } })
+        const user = await this.userRepository.findOne({ where: { email } })
         if (user) throw new BadRequestException('User already exists')
 
         const hashedPassword = await bcrypt.hash(password, 10)
-        const createUserDto = new CreateUserDto({
-            email,
-            password: hashedPassword,
-        })
-        const newUser = await this.userService.create(createUserDto)
+        const createDto = { email, password: hashedPassword }
+
+        const newUser = await this.userRepository.save(
+            this.userRepository.create(createDto),
+        )
         const token = await this.sign(newUser)
 
         return {

@@ -1,17 +1,20 @@
 import {
-    Controller,
-    Get,
-    Post,
     Body,
-    Patch,
-    Param,
+    Controller,
     Delete,
+    Get,
+    Param,
+    Patch,
+    Post,
+    UseGuards,
 } from '@nestjs/common'
+import { UserGuard } from 'src/auth/guards/user/user.guard'
 import { CommentService } from './comment.service'
 import { CreateCommentDto } from './dto/create-comment.dto'
 import { UpdateCommentDto } from './dto/update-comment.dto'
 
 @Controller('comment')
+@UseGuards(UserGuard)
 export class CommentController {
     constructor(private readonly commentService: CommentService) {}
 

@@ -1,17 +1,20 @@
 import {
-    Controller,
-    Get,
-    Post,
     Body,
-    Patch,
-    Param,
+    Controller,
     Delete,
+    Get,
+    Param,
+    Patch,
+    Post,
+    UseGuards,
 } from '@nestjs/common'
+import { UserGuard } from 'src/auth/guards/user/user.guard'
 import { CardService } from './card.service'
 import { CreateCardDto } from './dto/create-card.dto'
 import { UpdateCardDto } from './dto/update-card.dto'
 
 @Controller('card')
+@UseGuards(UserGuard)
 export class CardController {
     constructor(private readonly cardService: CardService) {}
 

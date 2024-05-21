@@ -1,17 +1,20 @@
 import {
-    Controller,
-    Get,
-    Post,
     Body,
-    Patch,
-    Param,
+    Controller,
     Delete,
+    Get,
+    Param,
+    Patch,
+    Post,
+    UseGuards,
 } from '@nestjs/common'
+import { UserGuard } from 'src/auth/guards/user/user.guard'
 import { ColumnService } from './column.service'
 import { CreateColumnDto } from './dto/create-column.dto'
 import { UpdateColumnDto } from './dto/update-column.dto'
 
 @Controller('column')
+@UseGuards(UserGuard)
 export class ColumnController {
     constructor(private readonly columnService: ColumnService) {}
 

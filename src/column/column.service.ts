@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common'
+import { BadRequestException, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { ColumnEntity } from 'src/database/entities/column.entity'
+import { UserEntity } from 'src/database/entities/user.entity'
 import { Repository } from 'typeorm'
 import { CreateColumnDto } from './dto/create-column.dto'
 import { UpdateColumnDto } from './dto/update-column.dto'
@@ -12,23 +13,52 @@ export class ColumnService {
         private readonly columnRepository: Repository<ColumnEntity>,
     ) {}
 
-    create(createColumnDto: CreateColumnDto) {
-        return 'This action adds a new column'
+    async create(createColumnDto: CreateColumnDto, user: UserEntity) {
+        delete user.password
+        const newColumn = this.columnRepository.create({
+            name: createColumnDto.name,
+            user,
+        })
+        await this.columnRepository.save(newColumn)
+
+        return newColumn
     }
 
-    findAll() {
-        return `This action returns all column`
+    async findAll(user: UserEntity) {
+        const columns = await this.columnRepository.find({
+            where: { user: { id: user.id } },
+        })
+        return { count: columns.length, data: columns.length ? columns : null }
     }
 
-    findOne(id: number) {
-        return `This action returns a #${id} column`
+    async findOne(id: number, user: UserEntity) {
+        return await this.columnRepository.findOne({
+            where: { id: id, user: { id: user.id } },
+        })
     }
 
-    update(id: number, updateColumnDto: UpdateColumnDto) {
-        return `This action updates a #${id} column`
+    async update(
+        id: number,
+        updateColumnDto: UpdateColumnDto,
+        user: UserEntity,
+    ) {
+        const column = await this.columnRepository.findOne({
+            where: { id, user: { id: user.id } },
+        })
+
+        if (!column) throw new BadRequestException('Column not found')
+        return await this.columnRepository.update(column, {
+            name: updateColumnDto.name,
+        })
     }
 
-    remove(id: number) {
-        return `This action removes a #${id} column`
+    async remove(id: number, user: UserEntity) {
+        const isColumnExists = await this.columnRepository.exists({
+            where: { id: id, user: { id: user.id } },
+        })
+
+        if (!isColumnExists) throw new BadRequestException('Column not found')
+        const deleteResult = await this.columnRepository.delete(id)
+        return { result: deleteResult.affected > 0 ? 'success' : 'fail' }
     }
 }

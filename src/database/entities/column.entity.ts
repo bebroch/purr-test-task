@@ -25,7 +25,7 @@ export class ColumnEntity {
     updated_at: Date
 
     @ManyToOne(() => UserEntity, (user) => user.id)
-    user: UserEntity[]
+    user: UserEntity
 
     @OneToMany(() => CardEntity, (card) => card.column)
     cards: CardEntity[]

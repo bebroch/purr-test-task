@@ -9,7 +9,11 @@ export class TokenService {
         return await this.jwtService.signAsync(payload)
     }
 
-    async decode(token: string) {
-        return await this.jwtService.decode(token)
+    async decode<T>(token: string): Promise<T | null> {
+        try {
+            return await this.jwtService.decode(token)
+        } catch (err) {
+            return null
+        }
     }
 }

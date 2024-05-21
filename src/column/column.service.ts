@@ -4,6 +4,8 @@ import { UpdateColumnDto } from './dto/update-column.dto'
 
 @Injectable()
 export class ColumnService {
+    constructor(private readonly columnService: ColumnService) {}
+
     create(createColumnDto: CreateColumnDto) {
         return 'This action adds a new column'
     }

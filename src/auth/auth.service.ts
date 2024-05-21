@@ -3,14 +3,14 @@ import { TokenService } from '@token/token'
 import * as bcrypt from 'bcrypt'
 import { UserEntity } from 'src/database/entities/user.entity'
 import { CreateUserDto } from 'src/database/services/user/dto/create-user.dto'
-import { UserService } from 'src/database/services/user/user.service'
+import { UserEntityService } from 'src/database/services/user/user.service'
 import { LoginDto } from './dto/login.dto'
 import { RegistrationDto } from './dto/registration.dto'
 
 @Injectable()
 export class AuthService {
     constructor(
-        private readonly userService: UserService,
+        private readonly userService: UserEntityService,
         private readonly tokenService: TokenService,
     ) {}
 

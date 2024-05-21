@@ -5,16 +5,16 @@ import { Repository } from 'typeorm'
 import { UserEntity } from '../../entities/user.entity'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
-import { UserService } from './user.service'
+import { UserEntityService } from './user.service'
 
 describe('UserService', () => {
-    let service: UserService
+    let service: UserEntityService
     let repositoryMock: MockType<Repository<UserEntity>>
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             providers: [
-                UserService,
+                UserEntityService,
                 {
                     provide: getRepositoryToken(UserEntity),
                     useFactory: jest.fn(() => ({
@@ -28,7 +28,7 @@ describe('UserService', () => {
             ],
         }).compile()
 
-        service = module.get<UserService>(UserService)
+        service = module.get<UserEntityService>(UserEntityService)
         repositoryMock = module.get(getRepositoryToken(UserEntity))
     })
 

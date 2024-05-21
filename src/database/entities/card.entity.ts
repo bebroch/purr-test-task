@@ -5,11 +5,11 @@ import {
     OneToMany,
     PrimaryGeneratedColumn,
 } from 'typeorm'
-import { Column } from './column.entity'
-import { Comment } from './comment.entity'
+import { ColumnEntity } from './column.entity'
+import { CommentEntity } from './comment.entity'
 
 @Entity()
-export class Card {
+export class CardEntity {
     @PrimaryGeneratedColumn()
     id: number
 
@@ -22,9 +22,9 @@ export class Card {
     @ColumnTypeorm()
     updated_at: Date
 
-    @ManyToOne(() => Column, (column) => column.id)
-    column: Column
+    @ManyToOne(() => ColumnEntity, (column) => column.id)
+    column: ColumnEntity
 
-    @OneToMany(() => Comment, (comment) => comment.card)
-    comments: Comment[]
+    @OneToMany(() => CommentEntity, (comment) => comment.card)
+    comments: CommentEntity[]
 }

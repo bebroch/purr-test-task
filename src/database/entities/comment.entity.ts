@@ -1,8 +1,8 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
-import { Card } from './card.entity'
+import { CardEntity } from './card.entity'
 
 @Entity()
-export class Comment {
+export class CommentEntity {
     @PrimaryGeneratedColumn()
     id: number
 
@@ -15,6 +15,6 @@ export class Comment {
     @Column()
     updated_at: Date
 
-    @ManyToOne(() => Card, (card) => card.id)
-    card: Card
+    @ManyToOne(() => CardEntity, (card) => card.id)
+    card: CardEntity
 }

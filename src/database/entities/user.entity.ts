@@ -4,10 +4,10 @@ import {
     OneToMany,
     PrimaryGeneratedColumn,
 } from 'typeorm'
-import { Column } from './column.entity'
+import { ColumnEntity } from './column.entity'
 
 @Entity()
-export class User {
+export class UserEntity {
     @PrimaryGeneratedColumn()
     id: number
 
@@ -23,6 +23,6 @@ export class User {
     @ColumnTypeorm()
     updated_at: Date
 
-    @OneToMany(() => Column, (column) => column.user)
-    columns: Column[]
+    @OneToMany(() => ColumnEntity, (column) => column.user)
+    columns: ColumnEntity[]
 }

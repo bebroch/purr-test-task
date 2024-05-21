@@ -1,10 +1,12 @@
 import {
     Column as ColumnTypeorm,
     Entity,
+    ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
 } from 'typeorm'
 import { Card } from './card.entity'
+import { User } from './user.entity'
 
 @Entity()
 export class Column {
@@ -19,6 +21,9 @@ export class Column {
 
     @ColumnTypeorm()
     updated_at: Date
+
+    @ManyToOne(() => User, (user) => user.id)
+    user: User[]
 
     @OneToMany(() => Card, (card) => card.column)
     cards: Card[]

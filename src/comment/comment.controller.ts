@@ -4,13 +4,19 @@ import {
     Delete,
     Get,
     Param,
+    ParseIntPipe,
     Patch,
     Post,
+    Query,
+    Req,
     UseGuards,
     UseInterceptors,
 } from '@nestjs/common'
-import { UserGuard } from '../auth/guards/user/user.guard'
-import { DataInterceptor } from '../common/interceptors/array/array.interceptor'
+import { UserGuard } from 'src/auth/guards/user/user.guard'
+import { AffectOrmInterceptor } from 'src/common/interceptors/affect-orm/affect-orm.interceptor'
+import { DataInterceptor } from 'src/common/interceptors/array/array.interceptor'
+import { ParseOptionalIntPipe } from 'src/common/pipes/parse-optional-int/parse-optional-int.pipe'
+import { RequestUser } from 'src/common/types/user/request.type'
 import { CommentService } from './comment.service'
 import { CreateCommentDto } from './dto/create-comment.dto'
 import { UpdateCommentDto } from './dto/update-comment.dto'
@@ -22,32 +28,41 @@ export class CommentController {
 
     @Post()
     @UseInterceptors(DataInterceptor)
-    create(@Body() createCommentDto: CreateCommentDto) {
-        return this.commentService.create(createCommentDto)
+    create(
+        @Body() createCommentDto: CreateCommentDto,
+        @Req() req: RequestUser,
+    ) {
+        return this.commentService.create(createCommentDto, req.user)
     }
 
     @Get()
     @UseInterceptors(DataInterceptor)
-    findAll() {
-        return this.commentService.findAll()
+    findAll(
+        @Query('cardId', ParseOptionalIntPipe) cardId: number,
+        @Req() req: RequestUser,
+    ) {
+        return this.commentService.findAll({ cardId }, req.user)
     }
 
     @Get(':id')
     @UseInterceptors(DataInterceptor)
-    findOne(@Param('id') id: string) {
-        return this.commentService.findOne(+id)
+    findOne(@Param('id', ParseIntPipe) id: number, @Req() req: RequestUser) {
+        return this.commentService.findOne(id, req.user)
     }
 
     @Patch(':id')
+    @UseInterceptors(AffectOrmInterceptor)
     update(
-        @Param('id') id: string,
+        @Param('id', ParseIntPipe) id: number,
         @Body() updateCommentDto: UpdateCommentDto,
+        @Req() req: RequestUser,
     ) {
-        return this.commentService.update(+id, updateCommentDto)
+        return this.commentService.update(id, updateCommentDto, req.user)
     }
 
     @Delete(':id')
-    remove(@Param('id') id: string) {
-        return this.commentService.remove(+id)
+    @UseInterceptors(AffectOrmInterceptor)
+    remove(@Param('id', ParseIntPipe) id: number, @Req() req: RequestUser) {
+        return this.commentService.remove(id, req.user)
     }
 }

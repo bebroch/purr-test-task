@@ -20,7 +20,6 @@ export class CardService {
         const column = await this.columnRepository.findOne({
             where: { id: createCardDto.columnId, user: { id: user.id } },
         })
-
         if (!column) throw new BadRequestException('Column not found')
 
         delete user.password
@@ -30,27 +29,13 @@ export class CardService {
             user,
             column,
         })
-        await this.cardRepository.save(newCard)
-
-        return newCard
+        return await this.cardRepository.save(newCard)
     }
 
-    async findAll(user: UserEntity) {
-        const cards = await this.cardRepository.find({
-            where: { user: { id: user.id } },
-            relations: ['column'],
-        })
-        return cards
-    }
-
-    async findAllByColumn(columnId: number, user: UserEntity) {
-        const column = await this.columnRepository.findOne({
-            where: { id: columnId, user: { id: user.id } },
-        })
-        if (!column) throw new BadRequestException('Column not found')
-
+    async findAll(query: { columnId?: number }, user: UserEntity) {
         return await this.cardRepository.find({
-            where: { column: { id: column.id }, user: { id: user.id } },
+            where: { column: { id: query.columnId }, user: { id: user.id } },
+            relations: ['column'],
         })
     }
 
@@ -74,11 +59,11 @@ export class CardService {
     }
 
     async remove(id: number, user: UserEntity) {
-        const isColumnExists = await this.cardRepository.exists({
+        const isCardExists = await this.cardRepository.exists({
             where: { id: id, user: { id: user.id } },
         })
 
-        if (!isColumnExists) throw new BadRequestException('Column not found')
+        if (!isCardExists) throw new BadRequestException('Card not found')
         return await this.cardRepository.delete(id)
     }
 }

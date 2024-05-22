@@ -12,10 +12,11 @@ import {
     UseGuards,
     UseInterceptors,
 } from '@nestjs/common'
-import { UserGuard } from '../auth/guards/user/user.guard'
-import { AffectOrmInterceptor } from '../common/interceptors/affect-orm/affect-orm.interceptor'
-import { DataInterceptor } from '../common/interceptors/array/array.interceptor'
-import { RequestUser } from '../common/types/user/request.type'
+import { UserGuard } from 'src/auth/guards/user/user.guard'
+import { AffectOrmInterceptor } from 'src/common/interceptors/affect-orm/affect-orm.interceptor'
+import { DataInterceptor } from 'src/common/interceptors/array/array.interceptor'
+import { ParseOptionalIntPipe } from 'src/common/pipes/parse-optional-int/parse-optional-int.pipe'
+import { RequestUser } from 'src/common/types/user/request.type'
 import { CardService } from './card.service'
 import { CreateCardDto } from './dto/create-card.dto'
 import { UpdateCardDto } from './dto/update-card.dto'
@@ -33,38 +34,32 @@ export class CardController {
 
     @Get()
     @UseInterceptors(DataInterceptor)
-    findAll(@Req() req: RequestUser) {
-        return this.cardService.findAll(req.user)
-    }
-
-    @Get('col')
-    @UseInterceptors(DataInterceptor)
-    findAllByColumn(
-        @Query('columnId', ParseIntPipe) columnId: number,
+    findAll(
+        @Query('columnId', ParseOptionalIntPipe) columnId: number,
         @Req() req: RequestUser,
     ) {
-        return this.cardService.findAllByColumn(columnId, req.user)
+        return this.cardService.findAll({ columnId }, req.user)
     }
 
     @Get(':id')
     @UseInterceptors(DataInterceptor)
-    findOne(@Param('id') id: string, @Req() req: RequestUser) {
-        return this.cardService.findOne(+id, req.user)
+    findOne(@Param('id', ParseIntPipe) id: number, @Req() req: RequestUser) {
+        return this.cardService.findOne(id, req.user)
     }
 
     @Patch(':id')
     @UseInterceptors(AffectOrmInterceptor)
     update(
-        @Param('id') id: string,
+        @Param('id', ParseIntPipe) id: number,
         @Body() updateCardDto: UpdateCardDto,
         @Req() req: RequestUser,
     ) {
-        return this.cardService.update(+id, updateCardDto, req.user)
+        return this.cardService.update(id, updateCardDto, req.user)
     }
 
     @Delete(':id')
     @UseInterceptors(AffectOrmInterceptor)
-    remove(@Param('id') id: string, @Req() req: RequestUser) {
-        return this.cardService.remove(+id, req.user)
+    remove(@Param('id', ParseIntPipe) id: number, @Req() req: RequestUser) {
+        return this.cardService.remove(id, req.user)
     }
 }

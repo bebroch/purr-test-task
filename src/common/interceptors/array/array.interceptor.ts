@@ -16,6 +16,7 @@ export class ArrayInterceptor implements NestInterceptor {
                     data: data.length > 0 ? data : null,
                 }
             }
+            return data
         }
 
         return next.handle().pipe(map(handler))

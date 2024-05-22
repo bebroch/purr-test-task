@@ -6,11 +6,13 @@ import {
     Param,
     Patch,
     Post,
+    Req,
     UseGuards,
     UseInterceptors,
 } from '@nestjs/common'
 import { UserGuard } from 'src/auth/guards/user/user.guard'
 import { DataInterceptor } from 'src/common/interceptors/array/array.interceptor'
+import { RequestUser } from 'src/common/types/user/request.type'
 import { CommentService } from './comment.service'
 import { CreateCommentDto } from './dto/create-comment.dto'
 import { UpdateCommentDto } from './dto/update-comment.dto'
@@ -22,32 +24,36 @@ export class CommentController {
 
     @Post()
     @UseInterceptors(DataInterceptor)
-    create(@Body() createCommentDto: CreateCommentDto) {
-        return this.commentService.create(createCommentDto)
+    create(
+        @Body() createCommentDto: CreateCommentDto,
+        @Req() req: RequestUser,
+    ) {
+        return this.commentService.create(createCommentDto, req.user)
     }
 
     @Get()
     @UseInterceptors(DataInterceptor)
-    findAll() {
-        return this.commentService.findAll()
+    findAll(@Req() req: RequestUser) {
+        return this.commentService.findAll(req.user)
     }
 
     @Get(':id')
     @UseInterceptors(DataInterceptor)
-    findOne(@Param('id') id: string) {
-        return this.commentService.findOne(+id)
+    findOne(@Param('id') id: string, @Req() req: RequestUser) {
+        return this.commentService.findOne(+id, req.user)
     }
 
     @Patch(':id')
     update(
         @Param('id') id: string,
         @Body() updateCommentDto: UpdateCommentDto,
+        @Req() req: RequestUser,
     ) {
-        return this.commentService.update(+id, updateCommentDto)
+        return this.commentService.update(+id, updateCommentDto, req.user)
     }
 
     @Delete(':id')
-    remove(@Param('id') id: string) {
-        return this.commentService.remove(+id)
+    remove(@Param('id') id: string, @Req() req: RequestUser) {
+        return this.commentService.remove(+id, req.user)
     }
 }

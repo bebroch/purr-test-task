@@ -1,11 +1,10 @@
-import { ApiProperty } from '@nestjs/swagger'
+import { ApiPropertyOptional } from '@nestjs/swagger'
 import { CreateCommentDto } from './create-comment.dto'
 
 export class UpdateCommentDto implements Omit<CreateCommentDto, 'cardId'> {
-    @ApiProperty({
+    @ApiPropertyOptional({
         description: 'Comment text.',
         example: 'My Comment Text',
-        required: false,
     })
     readonly text: string
 }

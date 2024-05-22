@@ -10,7 +10,7 @@ import {
     UseInterceptors,
 } from '@nestjs/common'
 import { UserGuard } from 'src/auth/guards/user/user.guard'
-import { ArrayInterceptor } from 'src/common/interceptors/array/array.interceptor'
+import { DataInterceptor } from 'src/common/interceptors/array/array.interceptor'
 import { CommentService } from './comment.service'
 import { CreateCommentDto } from './dto/create-comment.dto'
 import { UpdateCommentDto } from './dto/update-comment.dto'
@@ -21,17 +21,19 @@ export class CommentController {
     constructor(private readonly commentService: CommentService) {}
 
     @Post()
+    @UseInterceptors(DataInterceptor)
     create(@Body() createCommentDto: CreateCommentDto) {
         return this.commentService.create(createCommentDto)
     }
 
     @Get()
-    @UseInterceptors(ArrayInterceptor)
+    @UseInterceptors(DataInterceptor)
     findAll() {
         return this.commentService.findAll()
     }
 
     @Get(':id')
+    @UseInterceptors(DataInterceptor)
     findOne(@Param('id') id: string) {
         return this.commentService.findOne(+id)
     }

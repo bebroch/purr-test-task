@@ -7,7 +7,7 @@ import {
 import { map, Observable } from 'rxjs'
 
 @Injectable()
-export class ArrayInterceptor implements NestInterceptor {
+export class DataInterceptor implements NestInterceptor {
     intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
         const handler = (data: unknown) => {
             if (Array.isArray(data)) {
@@ -15,7 +15,10 @@ export class ArrayInterceptor implements NestInterceptor {
                     length: data.length,
                     data: data.length > 0 ? data : null,
                 }
+            } else if (typeof data === 'object') {
+                return { data: data ?? null }
             }
+
             return data
         }
 

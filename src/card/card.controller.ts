@@ -14,7 +14,7 @@ import {
 } from '@nestjs/common'
 import { UserGuard } from 'src/auth/guards/user/user.guard'
 import { AffectOrmInterceptor } from 'src/common/interceptors/affect-orm/affect-orm.interceptor'
-import { ArrayInterceptor } from 'src/common/interceptors/array/array.interceptor'
+import { DataInterceptor } from 'src/common/interceptors/array/array.interceptor'
 import { RequestUser } from 'src/common/types/user/request.type'
 import { CardService } from './card.service'
 import { CreateCardDto } from './dto/create-card.dto'
@@ -26,18 +26,19 @@ export class CardController {
     constructor(private readonly cardService: CardService) {}
 
     @Post()
+    @UseInterceptors(DataInterceptor)
     create(@Body() createCardDto: CreateCardDto, @Req() req: RequestUser) {
         return this.cardService.create(createCardDto, req.user)
     }
 
     @Get()
-    @UseInterceptors(ArrayInterceptor)
+    @UseInterceptors(DataInterceptor)
     findAll(@Req() req: RequestUser) {
         return this.cardService.findAll(req.user)
     }
 
     @Get('col')
-    @UseInterceptors(ArrayInterceptor)
+    @UseInterceptors(DataInterceptor)
     findAllByColumn(
         @Query('columnId', ParseIntPipe) columnId: number,
         @Req() req: RequestUser,
@@ -46,6 +47,7 @@ export class CardController {
     }
 
     @Get(':id')
+    @UseInterceptors(DataInterceptor)
     findOne(@Param('id') id: string, @Req() req: RequestUser) {
         return this.cardService.findOne(+id, req.user)
     }

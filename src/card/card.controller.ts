@@ -12,7 +12,13 @@ import {
     UseGuards,
     UseInterceptors,
 } from '@nestjs/common'
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
+import {
+    ApiBody,
+    ApiOperation,
+    ApiQuery,
+    ApiResponse,
+    ApiTags,
+} from '@nestjs/swagger'
 import { UserGuard } from 'src/auth/guards/user/user.guard'
 import { AffectOrmInterceptor } from 'src/common/interceptors/affect-orm/affect-orm.interceptor'
 import { DataInterceptor } from 'src/common/interceptors/array/array.interceptor'
@@ -41,6 +47,7 @@ export class CardController {
 
     @Get()
     @ApiOperation({ summary: 'Get cards by query parameters.' })
+    @ApiQuery({ name: 'columnId', type: Number, required: false })
     @ApiResponse({
         status: 200,
         description: 'Cards were successfully received.',

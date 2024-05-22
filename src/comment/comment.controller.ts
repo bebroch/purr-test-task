@@ -12,7 +12,13 @@ import {
     UseGuards,
     UseInterceptors,
 } from '@nestjs/common'
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
+import {
+    ApiBody,
+    ApiOperation,
+    ApiQuery,
+    ApiResponse,
+    ApiTags,
+} from '@nestjs/swagger'
 import { UserGuard } from 'src/auth/guards/user/user.guard'
 import { AffectOrmInterceptor } from 'src/common/interceptors/affect-orm/affect-orm.interceptor'
 import { DataInterceptor } from 'src/common/interceptors/array/array.interceptor'
@@ -47,6 +53,7 @@ export class CommentController {
 
     @Get()
     @ApiOperation({ summary: 'Get comments by query parameters.' })
+    @ApiQuery({ name: 'cardId', type: Number, required: false })
     @ApiResponse({
         status: 200,
         description: 'Comments were successfully received.',

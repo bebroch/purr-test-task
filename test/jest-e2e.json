@@ -12,6 +12,7 @@
   },
   "moduleNameMapper": {
     "@token/token/(.*)": "<rootDir>/../libs/token/src/$1",
-    "@token/token": "<rootDir>/../libs/token/src"
+    "@token/token": "<rootDir>/../libs/token/src",
+    "^src/(.*)": "<rootDir>/../src/$1"
   }
 }

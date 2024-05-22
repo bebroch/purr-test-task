@@ -1,11 +1,23 @@
+import { ApiProperty } from '@nestjs/swagger'
 import { IsOptional, IsString } from 'class-validator'
+import { CreateCardDto } from './create-card.dto'
 
-export class UpdateCardDto {
+export class UpdateCardDto implements Omit<CreateCardDto, 'columnId'> {
+    @ApiProperty({
+        description: 'Title of the card.',
+        example: 'My Title',
+        required: false,
+    })
     @IsString()
     @IsOptional()
-    title: string
+    readonly title: string
 
+    @ApiProperty({
+        description: 'Description of the card.',
+        example: 'My Description',
+        required: false,
+    })
     @IsString()
     @IsOptional()
-    description: string
+    readonly description: string
 }

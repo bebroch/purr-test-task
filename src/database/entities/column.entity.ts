@@ -24,7 +24,9 @@ export class ColumnEntity {
     @UpdateDateColumn()
     updated_at: Date
 
-    @ManyToOne(() => UserEntity, (user) => user.id)
+    @ManyToOne(() => UserEntity, (user) => user.id, {
+        onDelete: 'CASCADE',
+    })
     user: UserEntity
 
     @OneToMany(() => CardEntity, (card) => card.column)

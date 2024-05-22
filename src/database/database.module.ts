@@ -6,8 +6,6 @@ import { ColumnEntity } from './entities/column.entity'
 import { CommentEntity } from './entities/comment.entity'
 import { UserEntity } from './entities/user.entity'
 
-// TODO сделать удаление каскадом в сущностях, там где нужно
-
 @Module({
     imports: [
         TypeOrmModule.forRootAsync({

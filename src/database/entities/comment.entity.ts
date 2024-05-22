@@ -7,6 +7,7 @@ import {
     UpdateDateColumn,
 } from 'typeorm'
 import { CardEntity } from './card.entity'
+import { UserEntity } from './user.entity'
 
 @Entity({ name: 'comments' })
 export class CommentEntity {
@@ -22,6 +23,13 @@ export class CommentEntity {
     @UpdateDateColumn()
     updated_at: Date
 
-    @ManyToOne(() => CardEntity, (card) => card.id)
+    @ManyToOne(() => UserEntity, (user) => user.id, {
+        onDelete: 'CASCADE',
+    })
+    user: UserEntity
+
+    @ManyToOne(() => CardEntity, (card) => card.id, {
+        onDelete: 'CASCADE',
+    })
     card: CardEntity
 }

@@ -28,10 +28,14 @@ export class CardEntity {
     @UpdateDateColumn()
     updated_at: Date
 
-    @ManyToOne(() => UserEntity, (user) => user.id)
+    @ManyToOne(() => UserEntity, (user) => user.id, {
+        onDelete: 'CASCADE',
+    })
     user: UserEntity
 
-    @ManyToOne(() => ColumnEntity, (column) => column.id)
+    @ManyToOne(() => ColumnEntity, (column) => column.id, {
+        onDelete: 'CASCADE',
+    })
     column: ColumnEntity
 
     @OneToMany(() => CommentEntity, (comment) => comment.card)

@@ -12,6 +12,7 @@ import {
 } from '@nestjs/common'
 import { UserGuard } from 'src/auth/guards/user/user.guard'
 import { AffectOrmInterceptor } from 'src/common/interceptors/affect-orm/affect-orm.interceptor'
+import { ArrayInterceptor } from 'src/common/interceptors/array/array.interceptor'
 import { RequestUser } from 'src/common/types/user/request.type'
 import { ColumnService } from './column.service'
 import { CreateColumnDto } from './dto/create-column.dto'
@@ -28,6 +29,7 @@ export class ColumnController {
     }
 
     @Get()
+    @UseInterceptors(ArrayInterceptor)
     findAll(@Req() req: RequestUser) {
         return this.columnService.findAll(req.user)
     }

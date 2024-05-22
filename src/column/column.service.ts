@@ -19,9 +19,7 @@ export class ColumnService {
             name: createColumnDto.name,
             user,
         })
-        await this.columnRepository.save(newColumn)
-
-        return newColumn
+        return await this.columnRepository.save(newColumn)
     }
 
     async findAll(user: UserEntity) {
@@ -34,6 +32,7 @@ export class ColumnService {
     async findOne(id: number, user: UserEntity) {
         return await this.columnRepository.findOne({
             where: { id: id, user: { id: user.id } },
+            relations: ['cards.comments'],
         })
     }
 

@@ -13,6 +13,7 @@ import {
     UseInterceptors,
 } from '@nestjs/common'
 import { UserGuard } from 'src/auth/guards/user/user.guard'
+import { AffectOrmInterceptor } from 'src/common/interceptors/affect-orm/affect-orm.interceptor'
 import { DataInterceptor } from 'src/common/interceptors/array/array.interceptor'
 import { RequestUser } from 'src/common/types/user/request.type'
 import { CommentService } from './comment.service'
@@ -55,6 +56,7 @@ export class CommentController {
     }
 
     @Patch(':id')
+    @UseInterceptors(AffectOrmInterceptor)
     update(
         @Param('id') id: string,
         @Body() updateCommentDto: UpdateCommentDto,
@@ -64,6 +66,7 @@ export class CommentController {
     }
 
     @Delete(':id')
+    @UseInterceptors(AffectOrmInterceptor)
     remove(@Param('id') id: string, @Req() req: RequestUser) {
         return this.commentService.remove(+id, req.user)
     }

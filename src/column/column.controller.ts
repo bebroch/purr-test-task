@@ -4,6 +4,7 @@ import {
     Delete,
     Get,
     Param,
+    ParseIntPipe,
     Patch,
     Post,
     Req,
@@ -37,23 +38,23 @@ export class ColumnController {
 
     @Get(':id')
     @UseInterceptors(DataInterceptor)
-    findOne(@Param('id') id: string, @Req() req: RequestUser) {
-        return this.columnService.findOne(+id, req.user)
+    findOne(@Param('id', ParseIntPipe) id: number, @Req() req: RequestUser) {
+        return this.columnService.findOne(id, req.user)
     }
 
     @Patch(':id')
     @UseInterceptors(AffectOrmInterceptor)
     update(
-        @Param('id') id: string,
+        @Param('id', ParseIntPipe) id: number,
         @Body() updateColumnDto: UpdateColumnDto,
         @Req() req: RequestUser,
     ) {
-        return this.columnService.update(+id, updateColumnDto, req.user)
+        return this.columnService.update(id, updateColumnDto, req.user)
     }
 
     @Delete(':id')
     @UseInterceptors(AffectOrmInterceptor)
-    remove(@Param('id') id: string, @Req() req: RequestUser) {
-        return this.columnService.remove(+id, req.user)
+    remove(@Param('id', ParseIntPipe) id: number, @Req() req: RequestUser) {
+        return this.columnService.remove(id, req.user)
     }
 }

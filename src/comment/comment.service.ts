@@ -31,21 +31,10 @@ export class CommentService {
         return await this.commentRepository.save(newComment)
     }
 
-    async findAll(user: UserEntity) {
+    async findAll(query: { cardId?: number }, user: UserEntity) {
         return await this.commentRepository.find({
-            where: { user: { id: user.id } },
+            where: { card: { id: query.cardId }, user: { id: user.id } },
             relations: ['card'],
-        })
-    }
-
-    async findByCard(cardId: number, user: UserEntity) {
-        const card = await this.cardRepository.findOne({
-            where: { id: cardId, user: { id: user.id } },
-        })
-        if (!card) throw new BadRequestException('Card not found')
-
-        return await this.commentRepository.find({
-            where: { card: { id: card.id }, user: { id: user.id } },
         })
     }
 

@@ -1,8 +1,8 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { TokenService } from '@token/token'
+import { UserEntity } from 'src/database/entities/user.entity'
 import { Repository } from 'typeorm'
-import { UserEntity } from '../../../database/entities/user.entity'
 
 @Injectable()
 export class UserGuard implements CanActivate {

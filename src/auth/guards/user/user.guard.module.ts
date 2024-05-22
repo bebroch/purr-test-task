@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { TokenModule } from '@token/token'
-import { UserEntity } from '../../../database/entities/user.entity'
+import { UserEntity } from 'src/database/entities/user.entity'
 import { UserGuard } from './user.guard'
 
 @Module({

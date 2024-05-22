@@ -1,9 +1,9 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
+import { CardEntity } from 'src/database/entities/card.entity'
+import { ColumnEntity } from 'src/database/entities/column.entity'
+import { UserEntity } from 'src/database/entities/user.entity'
 import { Repository } from 'typeorm'
-import { CardEntity } from '../database/entities/card.entity'
-import { ColumnEntity } from '../database/entities/column.entity'
-import { UserEntity } from '../database/entities/user.entity'
 import { CreateCardDto } from './dto/create-card.dto'
 import { UpdateCardDto } from './dto/update-card.dto'
 

@@ -39,11 +39,11 @@ export class CardController {
 
     @Get('col')
     @UseInterceptors(DataInterceptor)
-    findAllByColumn(
+    findByColumn(
         @Query('columnId', ParseIntPipe) columnId: number,
         @Req() req: RequestUser,
     ) {
-        return this.cardService.findAllByColumn(columnId, req.user)
+        return this.cardService.findByColumn(columnId, req.user)
     }
 
     @Get(':id')

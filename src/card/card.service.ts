@@ -39,7 +39,7 @@ export class CardService {
         })
     }
 
-    async findAllByColumn(columnId: number, user: UserEntity) {
+    async findByColumn(columnId: number, user: UserEntity) {
         const column = await this.columnRepository.findOne({
             where: { id: columnId, user: { id: user.id } },
         })

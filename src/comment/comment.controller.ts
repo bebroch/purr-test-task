@@ -4,8 +4,10 @@ import {
     Delete,
     Get,
     Param,
+    ParseIntPipe,
     Patch,
     Post,
+    Query,
     Req,
     UseGuards,
     UseInterceptors,
@@ -35,6 +37,15 @@ export class CommentController {
     @UseInterceptors(DataInterceptor)
     findAll(@Req() req: RequestUser) {
         return this.commentService.findAll(req.user)
+    }
+
+    @Get('col')
+    @UseInterceptors(DataInterceptor)
+    findByCard(
+        @Query('cardId', ParseIntPipe) cardId: number,
+        @Req() req: RequestUser,
+    ) {
+        return this.commentService.findByCard(cardId, req.user)
     }
 
     @Get(':id')

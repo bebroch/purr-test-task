@@ -38,7 +38,7 @@ export class CommentService {
         })
     }
 
-    async findAllByCard(cardId: number, user: UserEntity) {
+    async findByCard(cardId: number, user: UserEntity) {
         const card = await this.cardRepository.findOne({
             where: { id: cardId, user: { id: user.id } },
         })

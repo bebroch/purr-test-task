@@ -12,16 +12,11 @@ import {
     UseGuards,
     UseInterceptors,
 } from '@nestjs/common'
-import {
-    ApiBody,
-    ApiOperation,
-    ApiQuery,
-    ApiResponse,
-    ApiTags,
-} from '@nestjs/swagger'
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { UserGuard } from 'src/auth/guards/user/user.guard'
 import { AffectOrmInterceptor } from 'src/common/interceptors/affect-orm/affect-orm.interceptor'
 import { DataInterceptor } from 'src/common/interceptors/array/array.interceptor'
+import { ParseOptionalIntPipe } from 'src/common/pipes/parse-optional-int/parse-optional-int.pipe'
 import { RequestUser } from 'src/common/types/user/request.type'
 import { CommentService } from './comment.service'
 import { CreateCommentDto } from './dto/create-comment.dto'
@@ -59,27 +54,11 @@ export class CommentController {
     })
     @ApiResponse({ status: 403, description: 'Forbidden.' })
     @UseInterceptors(DataInterceptor)
-    findAll(@Req() req: RequestUser) {
-        // TODO нужно сделать поиск по колонкам, типо совместить findAll и findByCard
-        return this.commentService.findAll(req.user)
-    }
-
-    @Get('col')
-    // TODO Поменять потом документацию, как склею findAll и findByColumn (todo выше)
-    @ApiOperation({ summary: 'Get comments by card id.' })
-    @ApiQuery({ name: 'cardId', type: 'number', required: false })
-    @ApiResponse({
-        status: 200,
-        description: 'Comments were successfully received.',
-    })
-    @ApiResponse({ status: 400, description: 'Invalid credentials' })
-    @ApiResponse({ status: 403, description: 'Forbidden.' })
-    @UseInterceptors(DataInterceptor)
-    findByCard(
-        @Query('cardId', ParseIntPipe) cardId: number,
+    findAll(
+        @Query('cardId', ParseOptionalIntPipe) cardId: number,
         @Req() req: RequestUser,
     ) {
-        return this.commentService.findByCard(cardId, req.user)
+        return this.commentService.findAll({ cardId }, req.user)
     }
 
     @Get(':id')
@@ -91,8 +70,8 @@ export class CommentController {
     @ApiResponse({ status: 400, description: 'Invalid credentials' })
     @ApiResponse({ status: 403, description: 'Forbidden.' })
     @UseInterceptors(DataInterceptor)
-    findOne(@Param('id') id: string, @Req() req: RequestUser) {
-        return this.commentService.findOne(+id, req.user)
+    findOne(@Param('id', ParseIntPipe) id: number, @Req() req: RequestUser) {
+        return this.commentService.findOne(id, req.user)
     }
 
     @Patch(':id')
@@ -105,11 +84,11 @@ export class CommentController {
     @ApiResponse({ status: 403, description: 'Forbidden.' })
     @UseInterceptors(AffectOrmInterceptor)
     update(
-        @Param('id') id: string,
+        @Param('id', ParseIntPipe) id: number,
         @Body() updateCommentDto: UpdateCommentDto,
         @Req() req: RequestUser,
     ) {
-        return this.commentService.update(+id, updateCommentDto, req.user)
+        return this.commentService.update(id, updateCommentDto, req.user)
     }
 
     @Delete(':id')
@@ -121,7 +100,7 @@ export class CommentController {
     @ApiResponse({ status: 400, description: 'Invalid credentials' })
     @ApiResponse({ status: 403, description: 'Forbidden.' })
     @UseInterceptors(AffectOrmInterceptor)
-    remove(@Param('id') id: string, @Req() req: RequestUser) {
-        return this.commentService.remove(+id, req.user)
+    remove(@Param('id', ParseIntPipe) id: number, @Req() req: RequestUser) {
+        return this.commentService.remove(id, req.user)
     }
 }

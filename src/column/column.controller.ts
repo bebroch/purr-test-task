@@ -4,6 +4,7 @@ import {
     Delete,
     Get,
     Param,
+    ParseIntPipe,
     Patch,
     Post,
     Req,
@@ -60,8 +61,8 @@ export class ColumnController {
     @ApiResponse({ status: 400, description: 'Invalid credentials' })
     @ApiResponse({ status: 403, description: 'Forbidden.' })
     @UseInterceptors(DataInterceptor)
-    findOne(@Param('id') id: string, @Req() req: RequestUser) {
-        return this.columnService.findOne(+id, req.user)
+    findOne(@Param('id', ParseIntPipe) id: number, @Req() req: RequestUser) {
+        return this.columnService.findOne(id, req.user)
     }
 
     @Patch(':id')
@@ -74,11 +75,11 @@ export class ColumnController {
     @ApiResponse({ status: 403, description: 'Forbidden.' })
     @UseInterceptors(AffectOrmInterceptor)
     update(
-        @Param('id') id: string,
+        @Param('id', ParseIntPipe) id: number,
         @Body() updateColumnDto: UpdateColumnDto,
         @Req() req: RequestUser,
     ) {
-        return this.columnService.update(+id, updateColumnDto, req.user)
+        return this.columnService.update(id, updateColumnDto, req.user)
     }
 
     @Delete(':id')
@@ -90,7 +91,7 @@ export class ColumnController {
     @ApiResponse({ status: 400, description: 'Invalid credentials' })
     @ApiResponse({ status: 403, description: 'Forbidden.' })
     @UseInterceptors(AffectOrmInterceptor)
-    remove(@Param('id') id: string, @Req() req: RequestUser) {
-        return this.columnService.remove(+id, req.user)
+    remove(@Param('id', ParseIntPipe) id: number, @Req() req: RequestUser) {
+        return this.columnService.remove(id, req.user)
     }
 }

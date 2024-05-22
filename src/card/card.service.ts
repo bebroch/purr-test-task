@@ -32,21 +32,10 @@ export class CardService {
         return await this.cardRepository.save(newCard)
     }
 
-    async findAll(user: UserEntity) {
+    async findAll(query: { columnId?: number }, user: UserEntity) {
         return await this.cardRepository.find({
-            where: { user: { id: user.id } },
+            where: { column: { id: query.columnId }, user: { id: user.id } },
             relations: ['column'],
-        })
-    }
-
-    async findByColumn(columnId: number, user: UserEntity) {
-        const column = await this.columnRepository.findOne({
-            where: { id: columnId, user: { id: user.id } },
-        })
-        if (!column) throw new BadRequestException('Column not found')
-
-        return await this.cardRepository.find({
-            where: { column: { id: column.id }, user: { id: user.id } },
         })
     }
 

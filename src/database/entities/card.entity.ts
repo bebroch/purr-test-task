@@ -9,6 +9,7 @@ import {
 } from 'typeorm'
 import { ColumnEntity } from './column.entity'
 import { CommentEntity } from './comment.entity'
+import { UserEntity } from './user.entity'
 
 @Entity({ name: 'cards' })
 export class CardEntity {
@@ -16,13 +17,19 @@ export class CardEntity {
     id: number
 
     @Column()
-    text: string
+    title: string
+
+    @Column()
+    description: string
 
     @CreateDateColumn()
     created_at: Date
 
     @UpdateDateColumn()
     updated_at: Date
+
+    @ManyToOne(() => UserEntity, (user) => user.id)
+    user: UserEntity
 
     @ManyToOne(() => ColumnEntity, (column) => column.id)
     column: ColumnEntity

@@ -12,6 +12,13 @@ import {
     UseGuards,
     UseInterceptors,
 } from '@nestjs/common'
+import {
+    ApiBody,
+    ApiOperation,
+    ApiQuery,
+    ApiResponse,
+    ApiTags,
+} from '@nestjs/swagger'
 import { UserGuard } from 'src/auth/guards/user/user.guard'
 import { AffectOrmInterceptor } from 'src/common/interceptors/affect-orm/affect-orm.interceptor'
 import { DataInterceptor } from 'src/common/interceptors/array/array.interceptor'
@@ -21,23 +28,47 @@ import { CreateCardDto } from './dto/create-card.dto'
 import { UpdateCardDto } from './dto/update-card.dto'
 
 @Controller('card')
+@ApiTags('card')
 @UseGuards(UserGuard)
 export class CardController {
     constructor(private readonly cardService: CardService) {}
 
     @Post()
+    @ApiOperation({ summary: 'Create Card.' })
+    @ApiBody({ type: CreateCardDto })
+    @ApiResponse({ status: 201, description: 'Card was created successfully' })
+    @ApiResponse({ status: 400, description: 'Invalid credentials' })
+    @ApiResponse({ status: 403, description: 'Forbidden' })
     @UseInterceptors(DataInterceptor)
     create(@Body() createCardDto: CreateCardDto, @Req() req: RequestUser) {
         return this.cardService.create(createCardDto, req.user)
     }
 
     @Get()
+    // TODO Поменять потом документацию, как склею findAll и findByColumn (todo ниже)
+    @ApiOperation({ summary: 'Get all cards.' })
+    @ApiResponse({
+        status: 200,
+        description: 'Cards were successfully received.',
+    })
+    @ApiResponse({ status: 403, description: 'Forbidden.' })
     @UseInterceptors(DataInterceptor)
     findAll(@Req() req: RequestUser) {
+        // TODO нужно сделать поиск по колонкам, типо совместить findAll и findByColumn
+        // Также сделать для комментариев
         return this.cardService.findAll(req.user)
     }
 
     @Get('col')
+    // TODO Поменять потом документацию, как склею findAll и findByColumn (todo выше)
+    @ApiOperation({ summary: 'Get cards by column id.' })
+    @ApiQuery({ name: 'columnId', type: 'number', required: false })
+    @ApiResponse({
+        status: 200,
+        description: 'Cards were successfully received.',
+    })
+    @ApiResponse({ status: 400, description: 'Invalid credentials' })
+    @ApiResponse({ status: 403, description: 'Forbidden.' })
     @UseInterceptors(DataInterceptor)
     findByColumn(
         @Query('columnId', ParseIntPipe) columnId: number,
@@ -47,12 +78,26 @@ export class CardController {
     }
 
     @Get(':id')
+    @ApiOperation({ summary: 'Find one card.' })
+    @ApiResponse({
+        status: 200,
+        description: 'Card was successfully received.',
+    })
+    @ApiResponse({ status: 400, description: 'Invalid credentials' })
+    @ApiResponse({ status: 403, description: 'Forbidden.' })
     @UseInterceptors(DataInterceptor)
     findOne(@Param('id') id: string, @Req() req: RequestUser) {
         return this.cardService.findOne(+id, req.user)
     }
 
     @Patch(':id')
+    @ApiOperation({ summary: 'Update one card.' })
+    @ApiResponse({
+        status: 200,
+        description: 'Card was successfully updated.',
+    })
+    @ApiResponse({ status: 400, description: 'Invalid credentials' })
+    @ApiResponse({ status: 403, description: 'Forbidden.' })
     @UseInterceptors(AffectOrmInterceptor)
     update(
         @Param('id') id: string,
@@ -63,6 +108,13 @@ export class CardController {
     }
 
     @Delete(':id')
+    @ApiOperation({ summary: 'Delete one card.' })
+    @ApiResponse({
+        status: 200,
+        description: 'Card was successfully deleted.',
+    })
+    @ApiResponse({ status: 400, description: 'Invalid credentials' })
+    @ApiResponse({ status: 403, description: 'Forbidden.' })
     @UseInterceptors(AffectOrmInterceptor)
     remove(@Param('id') id: string, @Req() req: RequestUser) {
         return this.cardService.remove(+id, req.user)

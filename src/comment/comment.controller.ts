@@ -46,8 +46,7 @@ export class CommentController {
     }
 
     @Get()
-    // TODO Поменять потом документацию, как склею findAll и findByCard (todo ниже)
-    @ApiOperation({ summary: 'Get all comments.' })
+    @ApiOperation({ summary: 'Get comments by query parameters.' })
     @ApiResponse({
         status: 200,
         description: 'Comments were successfully received.',

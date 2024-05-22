@@ -40,8 +40,7 @@ export class CardController {
     }
 
     @Get()
-    // TODO Поменять потом документацию, как склею findAll и findByColumn (todo ниже)
-    @ApiOperation({ summary: 'Get all cards.' })
+    @ApiOperation({ summary: 'Get cards by query parameters.' })
     @ApiResponse({
         status: 200,
         description: 'Cards were successfully received.',

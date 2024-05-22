@@ -12,10 +12,10 @@ import {
     UseGuards,
     UseInterceptors,
 } from '@nestjs/common'
-import { UserGuard } from 'src/auth/guards/user/user.guard'
-import { AffectOrmInterceptor } from 'src/common/interceptors/affect-orm/affect-orm.interceptor'
-import { DataInterceptor } from 'src/common/interceptors/array/array.interceptor'
-import { RequestUser } from 'src/common/types/user/request.type'
+import { UserGuard } from '../auth/guards/user/user.guard'
+import { AffectOrmInterceptor } from '../common/interceptors/affect-orm/affect-orm.interceptor'
+import { DataInterceptor } from '../common/interceptors/array/array.interceptor'
+import { RequestUser } from '../common/types/user/request.type'
 import { CardService } from './card.service'
 import { CreateCardDto } from './dto/create-card.dto'
 import { UpdateCardDto } from './dto/update-card.dto'

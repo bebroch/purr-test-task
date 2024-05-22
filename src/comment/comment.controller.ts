@@ -9,8 +9,8 @@ import {
     UseGuards,
     UseInterceptors,
 } from '@nestjs/common'
-import { UserGuard } from 'src/auth/guards/user/user.guard'
-import { DataInterceptor } from 'src/common/interceptors/array/array.interceptor'
+import { UserGuard } from '../auth/guards/user/user.guard'
+import { DataInterceptor } from '../common/interceptors/array/array.interceptor'
 import { CommentService } from './comment.service'
 import { CreateCommentDto } from './dto/create-comment.dto'
 import { UpdateCommentDto } from './dto/update-comment.dto'

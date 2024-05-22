@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { ColumnEntity } from 'src/database/entities/column.entity'
-import { UserEntity } from 'src/database/entities/user.entity'
 import { Repository } from 'typeorm'
+import { ColumnEntity } from '../database/entities/column.entity'
+import { UserEntity } from '../database/entities/user.entity'
 import { CreateColumnDto } from './dto/create-column.dto'
 import { UpdateColumnDto } from './dto/update-column.dto'
 

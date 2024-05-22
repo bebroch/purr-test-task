@@ -7,8 +7,10 @@ import {
     Patch,
     Post,
     UseGuards,
+    UseInterceptors,
 } from '@nestjs/common'
 import { UserGuard } from 'src/auth/guards/user/user.guard'
+import { ArrayInterceptor } from 'src/common/interceptors/array/array.interceptor'
 import { CommentService } from './comment.service'
 import { CreateCommentDto } from './dto/create-comment.dto'
 import { UpdateCommentDto } from './dto/update-comment.dto'
@@ -24,6 +26,7 @@ export class CommentController {
     }
 
     @Get()
+    @UseInterceptors(ArrayInterceptor)
     findAll() {
         return this.commentService.findAll()
     }

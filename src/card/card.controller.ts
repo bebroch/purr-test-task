@@ -14,6 +14,7 @@ import {
 } from '@nestjs/common'
 import { UserGuard } from 'src/auth/guards/user/user.guard'
 import { AffectOrmInterceptor } from 'src/common/interceptors/affect-orm/affect-orm.interceptor'
+import { ArrayInterceptor } from 'src/common/interceptors/array/array.interceptor'
 import { RequestUser } from 'src/common/types/user/request.type'
 import { CardService } from './card.service'
 import { CreateCardDto } from './dto/create-card.dto'
@@ -30,11 +31,13 @@ export class CardController {
     }
 
     @Get()
+    @UseInterceptors(ArrayInterceptor)
     findAll(@Req() req: RequestUser) {
         return this.cardService.findAll(req.user)
     }
 
     @Get('col')
+    @UseInterceptors(ArrayInterceptor)
     findAllByColumn(
         @Query('columnId', ParseIntPipe) columnId: number,
         @Req() req: RequestUser,

@@ -47,7 +47,7 @@ export class ColumnService {
         })
 
         if (!column) throw new BadRequestException('Column not found')
-        return await this.columnRepository.update(column, {
+        return await this.columnRepository.update(column.id, {
             name: updateColumnDto.name,
         })
     }
@@ -58,7 +58,6 @@ export class ColumnService {
         })
 
         if (!isColumnExists) throw new BadRequestException('Column not found')
-        const deleteResult = await this.columnRepository.delete(id)
-        return { result: deleteResult.affected > 0 ? 'success' : 'fail' }
+        return await this.columnRepository.delete(id)
     }
 }

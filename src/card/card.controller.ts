@@ -10,8 +10,10 @@ import {
     Query,
     Req,
     UseGuards,
+    UseInterceptors,
 } from '@nestjs/common'
 import { UserGuard } from 'src/auth/guards/user/user.guard'
+import { AffectOrmInterceptor } from 'src/common/interceptors/affect-orm/affect-orm.interceptor'
 import { RequestUser } from 'src/common/types/user/request.type'
 import { CardService } from './card.service'
 import { CreateCardDto } from './dto/create-card.dto'
@@ -46,6 +48,7 @@ export class CardController {
     }
 
     @Patch(':id')
+    @UseInterceptors(AffectOrmInterceptor)
     update(
         @Param('id') id: string,
         @Body() updateCardDto: UpdateCardDto,
@@ -55,6 +58,7 @@ export class CardController {
     }
 
     @Delete(':id')
+    @UseInterceptors(AffectOrmInterceptor)
     remove(@Param('id') id: string, @Req() req: RequestUser) {
         return this.cardService.remove(+id, req.user)
     }

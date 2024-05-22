@@ -67,12 +67,10 @@ export class CardService {
         })
         if (!card) throw new BadRequestException('Card not found')
 
-        const updateResult = await this.cardRepository.update(card.id, {
+        return await this.cardRepository.update(card.id, {
             title: updateCardDto.title,
             description: updateCardDto.description,
         })
-
-        return { result: updateResult.affected > 0 ? 'success' : 'fail' }
     }
 
     async remove(id: number, user: UserEntity) {
@@ -81,7 +79,6 @@ export class CardService {
         })
 
         if (!isColumnExists) throw new BadRequestException('Column not found')
-        const deleteResult = await this.cardRepository.delete(id)
-        return { result: deleteResult.affected > 0 ? 'success' : 'fail' }
+        return await this.cardRepository.delete(id)
     }
 }

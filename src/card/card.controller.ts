@@ -15,6 +15,7 @@ import {
 import {
     ApiBody,
     ApiOperation,
+    ApiParam,
     ApiQuery,
     ApiResponse,
     ApiTags,
@@ -46,8 +47,13 @@ export class CardController {
     }
 
     @Get()
-    @ApiOperation({ summary: 'Get cards by query parameters.' })
-    @ApiQuery({ name: 'columnId', type: Number, required: false })
+    @ApiOperation({ summary: 'Get cards by query parameters or all.' })
+    @ApiQuery({
+        name: 'columnId',
+        type: Number,
+        required: false,
+        description: 'ID of column',
+    })
     @ApiResponse({
         status: 200,
         description: 'Cards were successfully received.',
@@ -63,6 +69,7 @@ export class CardController {
 
     @Get(':id')
     @ApiOperation({ summary: 'Find one card.' })
+    @ApiParam({ name: 'id', type: Number, description: 'ID of card' })
     @ApiResponse({
         status: 200,
         description: 'Card was successfully received.',
@@ -76,6 +83,7 @@ export class CardController {
 
     @Patch(':id')
     @ApiOperation({ summary: 'Update one card.' })
+    @ApiParam({ name: 'id', type: Number, description: 'ID of card' })
     @ApiResponse({
         status: 200,
         description: 'Card was successfully updated.',
@@ -93,6 +101,7 @@ export class CardController {
 
     @Delete(':id')
     @ApiOperation({ summary: 'Delete one card.' })
+    @ApiParam({ name: 'id', type: Number, description: 'ID of card' })
     @ApiResponse({
         status: 200,
         description: 'Card was successfully deleted.',

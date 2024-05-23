@@ -15,6 +15,7 @@ import {
 import {
     ApiBody,
     ApiOperation,
+    ApiParam,
     ApiQuery,
     ApiResponse,
     ApiTags,
@@ -52,8 +53,13 @@ export class CommentController {
     }
 
     @Get()
-    @ApiOperation({ summary: 'Get comments by query parameters.' })
-    @ApiQuery({ name: 'cardId', type: Number, required: false })
+    @ApiOperation({ summary: 'Get comments by query parameters or all.' })
+    @ApiQuery({
+        name: 'cardId',
+        type: Number,
+        required: false,
+        description: 'ID of card',
+    })
     @ApiResponse({
         status: 200,
         description: 'Comments were successfully received.',
@@ -69,6 +75,7 @@ export class CommentController {
 
     @Get(':id')
     @ApiOperation({ summary: 'Find one comment.' })
+    @ApiParam({ name: 'id', type: Number, description: 'ID of comment' })
     @ApiResponse({
         status: 200,
         description: 'Comment was successfully received.',
@@ -82,6 +89,7 @@ export class CommentController {
 
     @Patch(':id')
     @ApiOperation({ summary: 'Update one comment.' })
+    @ApiParam({ name: 'id', type: Number, description: 'ID of comment' })
     @ApiResponse({
         status: 200,
         description: 'Comment was successfully updated.',
@@ -99,6 +107,7 @@ export class CommentController {
 
     @Delete(':id')
     @ApiOperation({ summary: 'Delete one comment.' })
+    @ApiParam({ name: 'id', type: Number, description: 'ID of comment' })
     @ApiResponse({
         status: 200,
         description: 'Comment was successfully deleted.',

@@ -11,7 +11,13 @@ import {
     UseGuards,
     UseInterceptors,
 } from '@nestjs/common'
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
+import {
+    ApiBody,
+    ApiOperation,
+    ApiParam,
+    ApiResponse,
+    ApiTags,
+} from '@nestjs/swagger'
 import { UserGuard } from 'src/auth/guards/user/user.guard'
 import { AffectOrmInterceptor } from 'src/common/interceptors/affect-orm/affect-orm.interceptor'
 import { DataInterceptor } from 'src/common/interceptors/array/array.interceptor'
@@ -54,6 +60,7 @@ export class ColumnController {
 
     @Get(':id')
     @ApiOperation({ summary: 'Find one column.' })
+    @ApiParam({ name: 'id', type: Number, description: 'ID of column' })
     @ApiResponse({
         status: 200,
         description: 'Column was successfully received.',
@@ -67,6 +74,7 @@ export class ColumnController {
 
     @Patch(':id')
     @ApiOperation({ summary: 'Update one column.' })
+    @ApiParam({ name: 'id', type: Number, description: 'ID of column' })
     @ApiResponse({
         status: 200,
         description: 'Column was successfully updated.',
@@ -84,6 +92,7 @@ export class ColumnController {
 
     @Delete(':id')
     @ApiOperation({ summary: 'Delete one column.' })
+    @ApiParam({ name: 'id', type: Number, description: 'ID of column' })
     @ApiResponse({
         status: 200,
         description: 'Column was successfully deleted.',

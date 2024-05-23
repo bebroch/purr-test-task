@@ -15,8 +15,11 @@ describe('AppController (e2e)', () => {
     let userRepository: Repository<UserEntity>
     let columnRepository: Repository<ColumnEntity>
 
-    const data: { users: UserEntity[]; columns: DeepPartial<ColumnEntity>[] } =
-        { users: [], columns: [] }
+    const data: {
+        users: UserEntity[]
+        columns: DeepPartial<ColumnEntity>[]
+        token: string
+    } = { users: [], columns: [], token: '' }
 
     beforeEach(async () => {
         const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -60,6 +63,7 @@ describe('AppController (e2e)', () => {
             expect(res.body.user).toHaveProperty('id')
             expect(res.body.user.email).toBe(userData.email)
             data.users.push(res.body.user)
+            data.token = res.body.token
         })
 
         it('/auth/login (POST)', async () => {
@@ -84,6 +88,7 @@ describe('AppController (e2e)', () => {
             const res = await request(app.getHttpServer())
                 .post('/column')
                 .send(columns[0])
+                .set('Authorization', `Bearer ${data.token}`)
                 .expect(201)
 
             expect(res.body).toHaveProperty('data')
@@ -95,6 +100,7 @@ describe('AppController (e2e)', () => {
             const res2 = await request(app.getHttpServer())
                 .post('/column')
                 .send(columns[1])
+                .set('Authorization', `Bearer ${data.token}`)
                 .expect(201)
 
             data.columns.push(res2.body.data)
@@ -103,7 +109,10 @@ describe('AppController (e2e)', () => {
         it('/column (GET)', async () => {
             const res = await request(app.getHttpServer())
                 .get('/column')
+                .set('Authorization', `Bearer ${data.token}`)
                 .expect(200)
+
+            expect(res.body).toHaveProperty('data')
 
             res.body.data.map((column, index) => {
                 expect(column.id).toBe(data.columns[index].id)

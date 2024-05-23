@@ -23,10 +23,9 @@ export class ColumnService {
     }
 
     async findAll(user: UserEntity) {
-        const columns = await this.columnRepository.find({
+        return await this.columnRepository.find({
             where: { user: { id: user.id } },
         })
-        return { count: columns.length, data: columns.length ? columns : null }
     }
 
     async findOne(id: number, user: UserEntity) {

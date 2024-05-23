@@ -42,7 +42,7 @@ export class CardService {
     async findOne(id: number, user: UserEntity) {
         return await this.cardRepository.findOne({
             where: { id: id, user: { id: user.id } },
-            relations: ['column'],
+            relations: ['column', 'comments'],
         })
     }
 
